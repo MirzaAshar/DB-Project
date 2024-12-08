@@ -1,0 +1,75 @@
+.pagination-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.author-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.pagination-button:hover {
+    background-color: #c0392b;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.post-content {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    margin-top: 10px;
+}
+
+.post-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a252f;
+    margin-bottom: 10px;
+}
+
+.post-container {
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.all-blogs-container {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.75);
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+    padding: 25px;
+    margin: 20px auto;
+    max-width: 900px;
+    border-radius: 13px;
+    z-index: 1;
+}
+
+.create-blog {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.create-blog:hover {
+    background-color: #c0392b;
+}

@@ -1,0 +1,116 @@
+.home-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.home-title {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.home-description {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.news-section, .events-section {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.75);
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+    margin-top: 30px;
+    padding: 25px;
+    margin: 20px auto;
+    max-width: 1000px;
+    border-radius: 13px;
+    z-index: 1;
+}
+
+.section-title {
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+.news-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.news-list li {
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.events-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.event-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    width: calc(33.3333% - 20px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.register-button {
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 10px 2px;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.register-button:hover {
+    background-color: #c0392b;
+}
+
+.event-card {
+    animation: fadeIn 1s ease-in-out;
+}
+.event-card:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+}
+
+.event-image {
+    width: 100%;
+    margin: 15px 0px;
+    height: max-content;
+    object-fit: cover;
+}
+
+.event-details {
+    padding: 10px;
+}
+
+.event-name {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.event-location, .event-date {
+    font-size: 14px;
+    color: #666;
+}
