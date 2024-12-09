@@ -4,7 +4,7 @@ import { signIn } from "../../../Services/Services";
 import { toast } from "react-toastify";
 import "./login.css";
 import NavBar from "../../NavBar";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
   const [loading, setLoading] = useState(false);
@@ -46,7 +46,9 @@ function Login() {
       })
       .catch((error) => {
         toast.dismiss(loadingToastId);
-        toast.error(error.message);
+        if(error.message.includes("401")) {
+          toast.error("Error: Invalid credentials");
+        }
       }).finally(() => {
         setLoading(false);
       });
@@ -88,6 +90,7 @@ function Login() {
             <button type="submit" className="submit-button">
               Login
             </button>
+            <p className="register-new">Don't have an account? <Link to="/signup" className="register-link">Register</Link></p>
           </form>
         </div>
       </div>

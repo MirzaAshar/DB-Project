@@ -1,40 +1,38 @@
 import { axiosService } from "./Helper";
 
-export const signIn = (userData) => {
+export const signIn = async (userData) => {
   return axiosService
     .post("/api/auth/login", userData, { headers: { "Content-Type": "application/json" } })
     .then((response) => response.data);
 };
 
-export const signUp = (userData) => {
+export const signUp = async (userData) => {
   return axiosService
-    .post("/api/users/", userData, {
+    .post("/api/auth/register", userData, { headers: { "Content-Type": "application/json" } })
+    .then((response) => response.data);
+};
+
+export const createBlog = async (postDto, userId, categoryId) => {
+  return axiosService
+    .post(`/api/user/${userId}/category/${categoryId}/posts`, postDto, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+        'Content-Type': 'multipart/form-data'
       },
     })
     .then((response) => response.data);
 };
 
-export const createBlog = (userId, categoryId, blogData) => {
-  return axiosService
-    .post(`/api/user/${userId}/category/${categoryId}/posts`, blogData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then((response) => response.data);
-};
 
-export const getAllCategories = () => {
+export const getAllCategories = async () => {
   return axiosService.get("/api/categories/").then((response) => response.data);
 }
 
-export const getUserById = (userId) => {
+export const getUserById = async (userId) => {
   return axiosService.get(`/api/users/${userId}`).then((response) => response.data);
 }
 
-export const getAllPosts = (pageNumber = 0, pageSize = 10, sortBy = "postId") => {
+export const getAllPosts = async (pageNumber = 0, pageSize = 10, sortBy = "postId") => {
   return axiosService.get("/api/posts", {
     params: {
       pageNumber,
@@ -58,22 +56,11 @@ export const getBlogById = (postId) => {
 
 export const addComment = (comment, postId, userId) => {
   return axiosService
-    .post(`/api/comments/post/${postId}/user/${userId}/comments`, {"content" : comment}, {
+    .post(`/api/comments/post/${postId}/user/${userId}/comments`, { "content": comment }, {
       headers: {
-        "Content-Type": "application/json",
+        'Authorization': `Bearer ${localStorage.getItem("token")}`,
+        'Content-Type': 'application/json'
       },
     })
     .then((response) => response.data);
 }
-
-// export const getEvents = () => {
-//   return axiosService.get("/events").then((response) => response.data);
-// };
-
-// export const getNews = () => {
-//   return axiosService.get("/news").then((response) => response.data);
-// };
-
-// export const getAlumni = () => {
-//   return axiosService.get("/alumni").then((response) => response.data);
-// };

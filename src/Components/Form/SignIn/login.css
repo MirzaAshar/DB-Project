@@ -16,6 +16,14 @@
     z-index: 1;
 }
 
+.register-new {
+    text-align: center;
+}
+
+.register-link {
+    color: #e74c3c;
+}
+
 .login-row {
     display: flex;
     flex-wrap: wrap;

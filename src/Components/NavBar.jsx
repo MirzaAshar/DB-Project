@@ -12,7 +12,7 @@ const NavBar = () => {
   useEffect(() => {
     if (localStorage.getItem("token")) {
       setIsLoggedIn(true);
-      getUserById(JSON.parse(localStorage.getItem("userId"))).then((user) => {
+      getUserById(localStorage.getItem("userId")).then((user) => {
         setUsername(user.name);
       });
     }

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getBlogById, addComment } from "../Services/Services";
 import NavBar from "./NavBar";
 import "./SingleBlog.css";
+import { toast } from "react-toastify";
 
 const SingleBlog = () => {
   const { postId } = useParams();
@@ -55,6 +56,10 @@ const SingleBlog = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
+                if (!localStorage.getItem("token")) {
+                  toast.error("Login to add comment");
+                  return;
+                }
                 const commentContent = e.target.elements.commentContent.value;
                 addComment(commentContent, postId, localStorage.getItem("userId"))
                   .then(() => {

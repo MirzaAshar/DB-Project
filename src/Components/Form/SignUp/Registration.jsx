@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "./RegistrationStyle.css";
 import { InputField, SelectField } from "./RegField";
-import { signUp } from "../../../Services/Services";
+import { signUp, signIn } from "../../../Services/Services";
 import NavBar from "../../NavBar";
 import { useNavigate } from "react-router-dom";
 
@@ -57,7 +57,7 @@ function Registration() {
     cnic: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    confirmpassword: "",
     currentOrganization: "",
     currentDesignation: "",
     currentCountry: "",
@@ -142,7 +142,7 @@ function Registration() {
     if (
       !formData.campusLocation ||
       !formData.cnic ||
-      !formData.confirmPassword ||
+      !formData.confirmpassword ||
       !formData.currentCity ||
       !formData.currentCountry ||
       !formData.currentDesignation ||
@@ -170,8 +170,6 @@ function Registration() {
         .then((resp) => {
           console.log(resp);
           toast.success("Registration Successful");
-          localStorage.setItem("token", resp.token);
-          localStorage.setItem("userId", JSON.stringify(resp.userId));
           setTimeout(() => {
             navigate("/");
           }, 3600);
@@ -181,7 +179,7 @@ function Registration() {
             cnic: "",
             email: "",
             password: "",
-            confirmPassword: "",
+            confirmpassword: "",
             currentOrganization: "",
             currentDesignation: "",
             currentCountry: "",
@@ -265,10 +263,10 @@ function Registration() {
               />
               <InputField
                 label="Confirm Password"
-                name="confirmPassword"
+                name="confirmpassword"
                 type="password"
                 placeholder="Enter Confirm Password..."
-                value={formData.confirmPassword}
+                value={formData.confirmpassword}
                 change={handleChange}
                 required={true}
               />
@@ -316,10 +314,10 @@ function Registration() {
                   formData.degreeProgram === ""
                     ? []
                     : formData.degreeProgram === "BS"
-                    ? bsDegrees
-                    : formData.degreeProgram === "MS"
-                    ? msDegrees
-                    : phdDegrees
+                      ? bsDegrees
+                      : formData.degreeProgram === "MS"
+                        ? msDegrees
+                        : phdDegrees
                 }
               />
             </div>
