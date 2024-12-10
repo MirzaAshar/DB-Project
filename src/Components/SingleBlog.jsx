@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getBlogById, addComment } from "../Services/Services";
+import { getBlogById, addComment, fetchImage } from "../Services/Services";
 import NavBar from "./NavBar";
 import "./SingleBlog.css";
 import { toast } from "react-toastify";
 
 const SingleBlog = () => {
   const { postId } = useParams();
+  const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [blogData, setBlogData] = useState({
     addedDate: "",
@@ -23,6 +24,11 @@ const SingleBlog = () => {
     getBlogById(postId)
       .then((data) => {
         console.log(data);
+        if (data.imageName) {
+          fetchImage(data.imageName).then((response) => {
+            setImageUrl(URL.createObjectURL(response));
+          });
+        }
         setBlogData(data);
         setLoading(false);
       })
@@ -44,11 +50,15 @@ const SingleBlog = () => {
 
           {blogData.category?.categoryTitle && (
             <div className="blog-category">
-              <strong>Category: </strong>{blogData.category.categoryTitle}
+              <strong>Category: </strong>
+              {blogData.category.categoryTitle}
             </div>
           )}
-          <div className="blog-content">
-            {blogData.content}
+          <div className="content-container">
+            <div className="blog-content">{blogData.content}</div>
+            <div >
+              <img src={imageUrl} alt="Blog-Image" className="blog-image" />
+            </div>
           </div>
 
           <div className="add-comment-section">
@@ -61,7 +71,11 @@ const SingleBlog = () => {
                   return;
                 }
                 const commentContent = e.target.elements.commentContent.value;
-                addComment(commentContent, postId, localStorage.getItem("userId"))
+                addComment(
+                  commentContent,
+                  postId,
+                  localStorage.getItem("userId")
+                )
                   .then(() => {
                     return getBlogById(postId);
                   })
@@ -72,8 +86,7 @@ const SingleBlog = () => {
                     console.log(error);
                   });
                 e.target.elements.commentContent.value = "";
-              }
-              }
+              }}
             >
               <input
                 type="text"
@@ -82,7 +95,9 @@ const SingleBlog = () => {
                 className="comment-input"
                 required
               ></input>
-              <button type="submit" className="comment-add-btn">Add Comment</button>
+              <button type="submit" className="comment-add-btn">
+                Add Comment
+              </button>
             </form>
           </div>
 

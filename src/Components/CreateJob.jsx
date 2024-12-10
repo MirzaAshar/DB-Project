@@ -1,148 +1,190 @@
 import React, { useState } from "react";
-import axios from "axios";
-import {
-  Typography,
-  TextField,
-  Button,
-  Paper,
-  Box,
-} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-const initial = { postId:"",postProfile: "", reqExperience: 0, postTechStack: [], postDesc:"" };
+import "./CreateJob.css";
+import NavBar from "./NavBar";
 
+const CreateJob = () => {
+  const [techStack, setTechStack] = useState([]);
+  const [techInput, setTechInput] = useState("");
+  const [formData, setFormData] = useState({
+    jobTitle: "",
+    jobDescription: "",
+    city: "",
+    country: "",
+    salaryLow: "",
+    salaryHigh: "",
+    companyName: "",
+    jobMode: "Onsite",
+    techStack: [],
+    requiredExperience: "",
+  });
 
-const Create = () => {
-  const skillSet = [
-    {
-      name: "Javascript"
-    },
-    {
-      name: "Java"
-    },
-    {
-      name: "Python"
-    },
-    {
-      name: "Django"
-    },
-    {
-      name: "Rust"
+  const handleAddTech = () => {
+    if (techInput.trim() !== "") {
+      setTechStack([...techStack, techInput.trim()]);
+      setTechInput("");
     }
-  ];
+  };
 
-  const navigate = useNavigate();
-  const [form, setForm] = useState(initial);
+  const handleRemoveTech = (index) => {
+    setTechStack(techStack.filter((_, i) => i !== index));
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:8080/jobPost",form)
-      .then((resp) => {
-        console.log(resp.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-      navigate('/');
-    };
-
-
-  const { postId, postProfile, reqExperience, postDesc } = form;
-
-  const handleChange = (e) => {
-    setForm({...form , postTechStack : [...form.postTechStack, e.target.value]});
-  }
-
-  
+    formData.techStack = techStack;
+    console.log(formData);
+  };
 
   return (
-    <Paper sx={{ padding:"1%"}} elevation={0}>
-      <Typography sx={{ margin: "3% auto" }} align="center" variant="h5">
-        Create New Post
-      </Typography>
-      <form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-          }}
-        >
-           <TextField
-            min="0"
-            type="number"
-            sx={{ width: "50%", margin: "2% auto" }}
-            
-            onChange={(e) => setForm({ ...form, postId: e.target.value })}
-            label="Enter your Post ID"
-            variant="outlined"
-            value={postId}
+    <div className="container">
+      <h1>Create Job</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="job-form-group">
+          <label className="job-label">Job Title</label>
+          <input
+            type="text"
+            className="job-input"
+            name="jobTitle"
+            value={formData.jobTitle}
+            onChange={handleChange}
           />
-          <TextField
-            type="string"
-            sx={{ width: "50%", margin: "2% auto" }}
-            required
-            onChange={(e) => setForm({ ...form, postProfile: e.target.value })}
-            label="Job-Profile"
-            variant="outlined"
-            value={postProfile}
-          />
-          <TextField
-            min="0"
-            type="number"
-            sx={{ width: "50%", margin: "2% auto" }}
-            required
-            onChange={(e) => setForm({ ...form, reqExperience: e.target.value })}
-            label="Years of Experience"
-            variant="outlined"
-            value={reqExperience}
-          />
-           <TextField
-            type="string"
-            sx={{ width: "50%", margin: "2% auto" }}
-            required
-            multiline
-            rows={4}
-            onChange={(e) => setForm({ ...form, postDesc: e.target.value })}
-            label="Job-desc"
-            variant="outlined"
-            value={postDesc}
-          />
-          <Box sx={{ margin:"1% auto"}}>
-          <h3>Please mention required skills</h3>
-         <ul>
-        {skillSet.map(({ name }, index) => {
-          return (
-            <li key={index}>
-              <div >
-                <div>
-                  <input
-                    type="checkbox"
-                    id={`custom-checkbox-${index}`}
-                    name={name}
-                    value={name}
-                    onChange={handleChange}  
-                  />
-                  <label htmlFor={`custom-checkbox-${index}`}>{name}</label>
-                </div>
-              </div>
-            </li>
-          );
-        })}
-       
-      </ul>
-          </Box>
-          <Button
-            sx={{ width: "50%", margin: "2% auto" }}
-            variant="contained"
-            type="submit"
-          >
-            Submit
-          </Button>
-        </Box>
-      </form>
-    </Paper>
-  );
-}
+        </div>
 
-export default Create
+        <div className="job-form-group">
+          <label className="job-label">Job Description</label>
+          <textarea
+            className="job-textarea"
+            name="jobDescription"
+            value={formData.jobDescription}
+            onChange={handleChange}
+          ></textarea>
+        </div>
+
+        <div className="job-form-group">
+          <label className="job-label">City</label>
+          <input
+            type="text"
+            className="job-input"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="job-form-group">
+          <label className="job-label">Country</label>
+          <input
+            type="text"
+            className="job-input"
+            name="country"
+            value={formData.country}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="job-form-group">
+          <label className="job-label">Salary Range</label>
+          <div className="salary-inputs">
+            <input
+              type="text"
+              className="job-input"
+              placeholder="Low"
+              name="salaryLow"
+              value={formData.salaryLow}
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              className="job-input"
+              placeholder="High"
+              name="salaryHigh"
+              value={formData.salaryHigh}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <div className="job-form-group">
+          <label className="job-label">Company Name</label>
+          <input
+            type="text"
+            className="job-input"
+            name="companyName"
+            value={formData.companyName}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="job-form-group">
+          <label className="job-label">Job Mode</label>
+          <select
+            className="job-select"
+            name="jobMode"
+            value={formData.jobMode}
+            onChange={handleChange}
+          >
+            <option>Onsite</option>
+            <option>Remote</option>
+            <option>Hybrid</option>
+          </select>
+        </div>
+
+        <div className="job-form-group">
+          <label className="job-label">Tech Stack</label>
+          <div className="salary-inputs">
+            <input
+              type="text"
+              className="job-input"
+              value={techInput}
+              onChange={(e) => setTechInput(e.target.value)}
+            />
+            <button
+              type="button"
+              className="job-submit-button"
+              onClick={handleAddTech}
+            >
+              Add
+            </button>
+          </div>
+          <div className="tags-container">
+            {techStack.map((tech, index) => (
+              <span key={index} className="tag">
+                {tech}
+                <button
+                  type="button"
+                  className="delete-tag-button"
+                  onClick={() => handleRemoveTech(index)}
+                >
+                  x
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="job-form-group">
+          <label className="job-label">Required Experience</label>
+          <input
+            type="text"
+            className="job-input"
+            name="requiredExperience"
+            value={formData.requiredExperience}
+            onChange={handleChange}
+          />
+        </div>
+
+        <button type="submit" className="job-submit-button">
+          Create Job
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default CreateJob;

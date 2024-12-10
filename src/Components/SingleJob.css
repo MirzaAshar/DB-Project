@@ -1,0 +1,63 @@
+.single-job-container {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.75);
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+    padding: 25px;
+    margin: 20px auto;
+    max-width: 900px;
+    border-radius: 13px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.job-details {
+    width: 100%;
+    max-width: 750px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.job-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.job-description {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+.job-experience {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.job-tech-stack {
+    margin-top: 20px;
+}
+
+.job-tech-stack h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.job-tech-stack ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.job-tech-stack li {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 5px;
+}

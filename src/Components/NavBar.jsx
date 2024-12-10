@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import "./NavBar.css";
 import { useLocation } from "react-router-dom";
 import { getUserById } from "../Services/Services";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
-
+  const navigate = useNavigate()
+  
   useEffect(() => {
     if (localStorage.getItem("token")) {
       setIsLoggedIn(true);
@@ -25,6 +27,7 @@ const NavBar = () => {
     localStorage.removeItem("categoryId");
     setIsLoggedIn(false);
     setUsername("");
+    navigate("/")
   };
 
   return (

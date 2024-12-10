@@ -12,6 +12,8 @@ import Jobs from "./Components/Jobs";
 import News from "./Components/News";
 import AllBlogs from "./Components/AllBlogs";
 import SingleBlog from "./Components/SingleBlog";
+import SingleJob from "./Components/SingleJob";
+import CreateJob from "./Components/CreateJob";
 
 function App() {
   const route = createBrowserRouter([
@@ -40,6 +42,10 @@ function App() {
       element: <SingleBlog />
     },
     {
+      path: "/jobs/job-post/:postId",
+      element: <SingleJob />
+    },
+    {
       path: "/blogs/page/:pageNumber",
       element: <AllBlogs />
     },
@@ -58,6 +64,10 @@ function App() {
     {
       path: "/create-blog",
       element: <Blog />
+    },
+    {
+      path: "/jobs/add-job",
+      element: <CreateJob />
     }
   ])
   return (

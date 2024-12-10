@@ -1,0 +1,114 @@
+/* General Styling */
+.container {
+  position: relative;
+  background-color: rgba(255, 255, 255, .75); /* White with 75% opacity */
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5); /* Black with 50% opacity */
+  padding: 25px;
+  margin: 20px auto;
+  max-width: 800px;
+  border-radius: 13px;
+  z-index: 1;
+}
+
+.job-header {
+  text-align: center;
+  background-color: #e74c3c;
+  color: white;
+  padding: 15px;
+  border-radius: 13px 13px 0 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.job-form-group {
+  margin: 10px 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.job-label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.job-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid black;
+    font-size: 14px;
+    line-height: 1.05;
+    background-color: #f9f9f9;
+}
+
+.job-textarea,
+.job-select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  line-height: 1.05;
+  background-color: #f9f9f9;
+}
+
+/* .job-input:focus, */
+.job-textarea:focus,
+.job-select:focus {
+  border-color: #e74c3c;
+  border: 1px solid #ccc;
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 87, 34, 0.5);
+}
+
+.job-textarea {
+  resize: none;
+  height: 120px;
+}
+
+.salary-inputs {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.tags-container .tag {
+  margin: 5px;
+  outline: none;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+.delete-tag-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 3px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.job-submit-button {
+  background-color: #e74c3c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.job-submit-button:hover {
+  background-color: #c0392b;
+}

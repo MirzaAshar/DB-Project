@@ -58,6 +58,12 @@
     z-index: 1;
 }
 
+.create-blog-div{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
 .create-blog {
     background-color: #e74c3c;
     color: white;
