@@ -14,6 +14,7 @@ import AllBlogs from "./Components/AllBlogs";
 import SingleBlog from "./Components/SingleBlog";
 import SingleJob from "./Components/SingleJob";
 import CreateJob from "./Components/CreateJob";
+import Profile from "./Components/Profile";
 
 function App() {
   const route = createBrowserRouter([
@@ -68,6 +69,10 @@ function App() {
     {
       path: "/jobs/add-job",
       element: <CreateJob />
+    },
+    {
+      path: "/profile",
+      element: <Profile />
     }
   ])
   return (

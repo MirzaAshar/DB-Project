@@ -37,6 +37,17 @@ export const getUserById = async (userId) => {
     .then((response) => response.data);
 };
 
+export const updateUser = (userId, userData) => {
+  return axiosService
+    .put(`/api/users/${userId}`, userData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => response.data);
+}
+
 export const getAllPosts = (
   pageNumber = 0,
   pageSize = 10,
@@ -57,10 +68,6 @@ export const getAllJobs = () => {
   return axiosService
     .get("/api/jobs/jobPosts")
     .then((response) => response.data);
-};
-
-export const getAllNews = () => {
-  return axiosService.get("/api/news/").then((response) => response.data);
 };
 
 export const getBlogById = (postId) => {
@@ -101,4 +108,16 @@ export const getJobById = async (jobId) => {
 
 export const getTotalPosts = async () => {
   return axiosService.get("/api/posts/count").then((response) => response.data);
+}
+
+export const getAllNews = () => {
+  return axiosService.get("/api/news/").then((response) => response.data);
+}
+
+export const getPostsByUser = (userId) => {
+  return axiosService.get(`/api/user/${userId}/posts`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  }).then((response) => response.data);
 }

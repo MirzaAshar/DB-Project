@@ -40,6 +40,8 @@ function Login() {
         localStorage.setItem("userId", JSON.stringify(resp.userID));
         toast.dismiss(loadingToastId);
         toast.success("Login Successful");
+        const hashedPassword = btoa(formData.password);
+        localStorage.setItem("hashedPassword", hashedPassword);
         setTimeout(() => {
           navigate("/");
         }, 1500);

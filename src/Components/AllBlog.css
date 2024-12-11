@@ -40,11 +40,19 @@
 }
 
 .post-container {
-    border: 1px solid #ddd;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.75);
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+    padding: 25px;
+    margin: 20px auto;
+    max-width: 900px;
+    border-radius: 13px;
+    z-index: 1;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-container:hover {
+    transform: translateY(-5px);
 }
 
 .all-blogs-container {

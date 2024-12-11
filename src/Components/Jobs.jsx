@@ -68,6 +68,7 @@ const Jobs = () => {
       ) : (
         <div className="jobs-container">
           {toast.dismiss(loadingToast)}
+          <h1>Job Postings</h1>
           <div className="jobs-grid">
             {currentJobs.map((job) => (
               <div

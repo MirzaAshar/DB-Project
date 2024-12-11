@@ -93,6 +93,9 @@ const AllBlogs = () => {
         <div>
           {toast.dismiss(loadingToast)}
           <div className="all-blogs-container">
+          <div >
+            <h1>All Blog Posts</h1>
+          </div>
             {renderPosts()}
             <div className="pagination-controls">
               {renderPageNumbers()}
