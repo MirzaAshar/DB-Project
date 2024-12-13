@@ -16,6 +16,10 @@ const Jobs = () => {
   useEffect(() => {
     loadingToast = toast.loading("Loading Jobs...");
     setLoading(true);
+    setTimeout(() => {
+      // toast.dismiss(loadingToast);
+    }
+    , 1000);
     getAllJobs()
       .then((data) => {
         console.log(data);

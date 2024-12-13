@@ -52,14 +52,14 @@ const NavBar = () => {
         <li className={location.pathname === "/news" ? "active" : ""}>
           <Link to="/news">News</Link>
         </li>
-        {/* <li className={location.pathname === "/events" ? "active" : ""}>
+        <li className={location.pathname === "/events" ? "active" : ""}>
           <Link to="/events">Events</Link>
-        </li> */}
-        <li
+        </li>
+        {/* <li
           className={location.pathname === "/alumni-directory" ? "active" : ""}
         >
           <Link to="/alumni-directory">Alumni Directory</Link>
-        </li>
+        </li> */}
         {isLoggedIn ? (
           <li
             className="navbar-username"

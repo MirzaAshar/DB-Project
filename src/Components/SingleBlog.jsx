@@ -56,9 +56,12 @@ const SingleBlog = () => {
           )}
           <div className="content-container">
             <div className="blog-content">{blogData.content}</div>
-            <div >
+            {
+              blogData.imageName  && (
+                <div>
               <img src={imageUrl} alt="Blog-Image" className="blog-image" />
-            </div>
+              </div>  )  
+            }
           </div>
 
           <div className="add-comment-section">

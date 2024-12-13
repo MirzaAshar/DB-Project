@@ -1,12 +1,38 @@
 import React, { useState, useEffect } from "react";
-import "./Profile.css"; // Assuming this CSS file for styling
-import NavBar from "./NavBar";
-import { getPostsByUser, getUserById } from "../Services/Services";
-import { updateUser } from "../Services/Services";
+import { useNavigate } from "react-router-dom";
+import {
+  isAdmin,
+  getAllUsers,
+  deleteUser,
+  getAllPosts,
+  getAllNews,
+  deleteNews,
+  getAllEvents,
+  deleteEvent
+} from "../Services/Services";
 import { toast } from "react-toastify";
+import {
+  getPostsByUser,
+  getUserById,
+  updateUser,
+  deletePost,
+} from "../Services/Services";
+import NavBar from "./NavBar";
+import "./Profile.css";
 
 const Profile = () => {
   const [selectedOption, setSelectedOption] = useState("updateProfile");
+  const [isAdminUser, setIsAdminUser] = useState(false);
+
+  useEffect(() => {
+    isAdmin(localStorage.getItem("userId"))
+      .then((data) => {
+        setIsAdminUser(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const renderContent = () => {
     switch (selectedOption) {
@@ -14,10 +40,14 @@ const Profile = () => {
         return <UpdateProfile />;
       case "userPosts":
         return <ViewUserPosts />;
-      case "userJobPostings":
-        return <ViewUserJobPostings />;
-      case "userComments":
-        return <ViewUserComments />;
+      case "manageUsers":
+        return <ManageUsers />;
+      case "managePosts":
+        return <ManagePosts />;
+      case "manageNews":
+        return <ManageNews />;
+      case "manageEvents":
+        return <ManageEvents />;
       default:
         return (
           <div className="content-box">
@@ -38,14 +68,28 @@ const Profile = () => {
               Update Profile
             </li>
             <li onClick={() => setSelectedOption("userPosts")}>
-              View User Posts
+              View Your Posts
             </li>
-            <li onClick={() => setSelectedOption("userJobPostings")}>
-              View User Job Postings
-            </li>
-            <li onClick={() => setSelectedOption("userComments")}>
-              View User Comments
-            </li>
+            {isAdminUser && (
+              <li onClick={() => setSelectedOption("manageUsers")}>
+                Manage Users
+              </li>
+            )}
+            {isAdminUser && (
+              <li onClick={() => setSelectedOption("managePosts")}>
+                Manage Posts
+              </li>
+            )}
+            {isAdminUser && (
+              <li onClick={() => setSelectedOption("manageNews")}>
+                Manage News
+              </li>
+            )}
+            {isAdminUser && (
+              <li onClick={() => setSelectedOption("manageEvents")}>
+                Manage Events
+              </li>
+            )}
           </ul>
         </div>
         <div className="right-pane">{renderContent()}</div>
@@ -139,11 +183,11 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className="form-container">
+    <div className="profile-form-container">
       <h2>Update Profile</h2>
       <form onSubmit={handleSubmit}>
-        <div className="form-row">
-          <div className="form-group">
+        <div className="profile-form-row">
+          <div className="profile-form-group">
             <label htmlFor="name">Name</label>
             <input
               type="text"
@@ -155,7 +199,7 @@ const UpdateProfile = () => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="profile-form-group">
             <label htmlFor="email">Email</label>
             <input
               type="email"
@@ -168,8 +212,8 @@ const UpdateProfile = () => {
           </div>
         </div>
 
-        <div className="form-row">
-          <div className="form-group">
+        <div className="profile-form-row">
+          <div className="profile-form-group">
             <label htmlFor="currentOrganization">Current Organization</label>
             <input
               type="text"
@@ -181,7 +225,7 @@ const UpdateProfile = () => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="profile-form-group">
             <label htmlFor="currentDesignation">Current Designation</label>
             <input
               type="text"
@@ -194,8 +238,8 @@ const UpdateProfile = () => {
           </div>
         </div>
 
-        <div className="form-row">
-          <div className="form-group">
+        <div className="profile-form-row">
+          <div className="profile-form-group">
             <label htmlFor="currentCountry">Current Country</label>
             <input
               type="text"
@@ -207,7 +251,7 @@ const UpdateProfile = () => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="profile-form-group">
             <label htmlFor="currentCity">Current City</label>
             <input
               type="text"
@@ -220,10 +264,11 @@ const UpdateProfile = () => {
           </div>
         </div>
 
-        <div className="form-group">
+        <div className="profile-form-group">
           <label htmlFor="about">About</label>
           <textarea
             id="about"
+            className="profile-textarea"
             name="about"
             value={profileData.about}
             onChange={handleChange}
@@ -231,27 +276,29 @@ const UpdateProfile = () => {
           ></textarea>
         </div>
 
-        <button type="submit" className="submit-button">
+        <button type="submit" className="profile-submit-button">
           Update Profile
         </button>
       </form>
       {showPasswordPopUp && (
-        <div className="popup-container">
+        <div className="profile-popup-container">
           <div className="popup">
             <h3>Enter Password</h3>
             <input
               type="password"
-              className="popup-input"
               value={profileData.password}
               onChange={handlePasswordChange}
               placeholder="Enter your password"
             />
-            <button onClick={handleConfirmPassword} className="popup-button">
+            <button
+              onClick={handleConfirmPassword}
+              className="profile-popup-button"
+            >
               Confirm
             </button>
             <button
               onClick={() => setShowPasswordPopUp(false)}
-              className="popup-close-button"
+              className="profile-popup-close-button"
             >
               x
             </button>
@@ -263,35 +310,325 @@ const UpdateProfile = () => {
 };
 
 const ViewUserPosts = () => {
-//   useEffect(() => {
-//     getPostsByUser(localStorage.getItem("userId")).then((posts) => {
-//       console.log(posts);
-//     });
-//   }, []);
+  const navigate = useNavigate();
+  const [posts, setPosts] = useState([]);
+  const [totalPosts, setTotalPosts] = useState(0);
+  const [pageSize] = useState(10);
+  const currentPage = 1;
+  let loadingToast;
+
+  useEffect(() => {
+    loadingToast = toast.loading("Loading Posts...");
+    getPostsByUser(localStorage.getItem("userId")).then((data) => {
+      setTotalPosts(data.totalElements);
+    });
+
+    getPostsByUser(localStorage.getItem("userId"))
+      .then((data) => {
+        console.log(data);
+        setPosts(data.content);
+        toast.dismiss(loadingToast);
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.dismiss(loadingToast);
+      });
+  }, [currentPage, pageSize]);
+
+  const handleDeletePost = (postId) => {
+    deletePost(postId).then(() => {
+      toast.success("Post deleted successfully.");
+      getPostsByUser(localStorage.getItem("userId")).then((data) => {
+        setTotalPosts(data.totalElements);
+      });
+
+      getPostsByUser(localStorage.getItem("userId"))
+        .then((data) => {
+          console.log(data);
+          setPosts(data.content);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+  };
+  const renderPosts = () => {
+    if (totalPosts === 0) {
+      return <p>No posts found.</p>;
+    }
+    return posts.map((post) => (
+      <div key={post.postId} className="profile-post-container">
+        <h2
+          className="post-title"
+          onClick={() =>
+            navigate(`/blog/${post.postId}/${post.title.replace(/ /g, "-")}`)
+          }
+        >
+          {post.title}
+        </h2>
+        <h4 className="author-title">Created by: {post.user.name}</h4>
+        <p className="post-content">
+          {new Date(post.addedDate)
+            .toLocaleString({
+              day: "2-digit",
+              month: "short",
+              year: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+            .replace(/:\d{2}\s/, " ")
+            .replace(/,/g, " at")}
+        </p>
+        <button
+          className="delete-button"
+          onClick={() => handleDeletePost(post.postId)}
+        >
+          🗑️
+        </button>
+      </div>
+    ));
+  };
+
+  const totalPages = Math.ceil(totalPosts / pageSize);
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => {
+            loadingToast = toast.loading("Loading Posts...");
+            getPostsByUser(localStorage.getItem("userId"), i - 1, pageSize)
+              .then((data) => {
+                setPosts(data.content);
+                toast.dismiss(loadingToast);
+              })
+              .catch((error) => {
+                console.error(error);
+                toast.dismiss(loadingToast);
+              });
+          }}
+          className={`pagination-button ${currentPage === i ? "active" : ""}`}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageNumbers;
+  };
+
   return (
     <div className="content-box">
-      <h2>User Posts</h2>
-      <p>Here are all the posts made by the user.</p>
+      <h2>Your Posts</h2>
+      <div>
+        {renderPosts()}
+        <div className="pagination-controls">{renderPageNumbers()}</div>
+      </div>
     </div>
   );
 };
 
-const ViewUserJobPostings = () => {
+const ManageUsers = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAllUsers().then((data) => {
+      setUsers(data);
+      setLoading(false);
+    });
+  }, []);
+
+  const handleDeleteUser = (userId) => {
+    deleteUser(userId).then(() => {
+      toast.success("User deleted successfully.");
+      setUsers(users.filter((user) => user.id !== userId));
+    });
+  };
+
+  const renderUsers = () => {
+    if (loading) {
+      return <p>Loading users...</p>;
+    }
+    if (users.length === 0) {
+      return <p>No users found.</p>;
+    }
+    return users.map((user) => (
+      <div key={user.userId} className="profile-post-container">
+        <h2>{user.name}</h2>
+        <h4>{user.email}</h4>
+        <button
+          className="delete-button"
+          onClick={() => handleDeleteUser(user.id)}
+        >
+          🗑️
+        </button>
+      </div>
+    ));
+  };
+
   return (
     <div className="content-box">
-      <h2>User Job Postings</h2>
-      <p>Here are all the job postings created by the user.</p>
+      <h2>Manage Users</h2>
+      <div>{renderUsers()}</div>
     </div>
   );
 };
 
-const ViewUserComments = () => {
+const ManagePosts = () => {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAllPosts().then((data) => {
+      console.log(data);
+      setPosts(data.content);
+      setLoading(false);
+    });
+  }, []);
+
+  const handleDeletePost = (postId) => {
+    deletePost(postId).then(() => {
+      toast.success("Post deleted successfully.");
+      setPosts(posts.filter((post) => post.postId !== postId));
+      getAllPosts().then((data) => {
+        console.log(data);
+        setPosts(data.content);
+        setLoading(false);
+      });
+    });
+  };
+
+  const renderPosts = () => {
+    if (loading) {
+      return <p>Loading posts...</p>;
+    }
+    if (posts.length === 0) {
+      return <p>No posts found.</p>;
+    }
+    return posts.map((post) => (
+      <div key={post.postId} className="profile-post-container">
+        <h2>{post.title}</h2>
+        <h4>{post.user ? post.user.name : "Unknown User"}</h4>
+        <button
+          className="delete-button"
+          onClick={() => handleDeletePost(post.postId)}
+        >
+          🗑️
+        </button>
+      </div>
+    ));
+  };
+
   return (
     <div className="content-box">
-      <h2>User Comments</h2>
-      <p>Here are all the comments made by the user.</p>
+      <h2>Manage Posts</h2>
+      <div>{renderPosts()}</div>
     </div>
   );
 };
 
+const ManageNews = () => {
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAllNews().then((data) => {
+      setNews(data);
+      setLoading(false);
+    });
+  }, []);
+
+  const handleDeleteNews = (newsId) => {
+    deleteNews(newsId).then(() => {
+      toast.success("News deleted successfully.");
+      setNews(news.filter((newsItem) => newsItem.newsId !== newsId));
+      getAllNews().then((data) => {
+        setNews(data);
+        setLoading(false);
+      });
+    });
+  };
+
+  const renderNews = () => {
+    console.log(news);
+    if (loading) {
+      return <p>Loading news...</p>;
+    }
+    if (news.length === 0) {
+      return <p>No news found.</p>;
+    }
+    return news.map((newsItem) => (
+      <div key={newsItem.newsId} className="profile-post-container">
+        <h2>{newsItem.title}</h2>
+        <h4>{newsItem.author ? newsItem.eventOrganizer : "Unknown Author"}</h4>
+        <button
+          className="delete-button"
+          onClick={() => handleDeleteNews(newsItem.id)}
+        >
+          🗑️
+        </button>
+      </div>
+    ));
+  };
+
+  return (
+    <div className="content-box">
+      <h2>Manage News</h2>
+      <div>{renderNews()}</div>
+    </div>
+  );
+};
+
+const ManageEvents = () => {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAllEvents().then((data) => {
+      setEvents(data);
+      setLoading(false);
+    });
+  }, []);
+
+  const handleDeleteEvent = (eventId) => {
+    deleteEvent(eventId).then(() => {
+      toast.success("Event deleted successfully.");
+      setEvents(events.filter((event) => event.eventId !== eventId));
+      getAllEvents().then((data) => {
+        setEvents(data);
+        setLoading(false);
+      });
+    });
+  };
+
+  const renderEvents = () => {
+    if (loading) {
+      return <p>Loading events...</p>;
+    }
+    if (events.length === 0) {
+      return <p>No events found.</p>;
+    }
+    return events.map((event) => (
+      <div key={event.eventId} className="profile-post-container">
+        <h2>{event.title}</h2>
+        {/* <h4>{event.organizer ? event.organizer : "Unknown Organizer"}</h4> */}
+        <button
+          className="delete-button"
+          onClick={() => handleDeleteEvent(event.eventId)}
+        >
+          🗑️
+        </button>
+      </div>
+    ));
+  };
+
+  return (
+    <div className="content-box">
+      <h2>Manage Events</h2>
+      <div>{renderEvents()}</div>
+    </div>
+  );
+};
 export default Profile;

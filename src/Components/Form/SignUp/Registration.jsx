@@ -378,7 +378,7 @@ function Registration() {
 
         {page === 2 && (
           <form onSubmit={handleSubmit}>
-            <h2>Upload Photo and Bio</h2>
+            <h2>Bio</h2>
             <div className="form-row">
               <label htmlFor="about">About:</label>
               <textarea

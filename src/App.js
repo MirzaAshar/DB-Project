@@ -15,6 +15,9 @@ import SingleBlog from "./Components/SingleBlog";
 import SingleJob from "./Components/SingleJob";
 import CreateJob from "./Components/CreateJob";
 import Profile from "./Components/Profile";
+import CreateNews from "./Components/CreateNews";
+import SingleNews from "./Components/SingleNews";
+import AddEvent from "./Components/Event/AddEvent";
 
 function App() {
   const route = createBrowserRouter([
@@ -35,7 +38,7 @@ function App() {
       element: <AlumniDirectory />
     },
     {
-      path: "/events/:eventName",
+      path: "/events/:eventId/:eventName",
       element: <EventDetails />
     },
     {
@@ -49,6 +52,9 @@ function App() {
     {
       path: "/blogs/page/:pageNumber",
       element: <AllBlogs />
+    },
+    {
+      path: "/profile/posts/page/:pageNumber"
     },
     {
       path: "/jobs",
@@ -73,6 +79,17 @@ function App() {
     {
       path: "/profile",
       element: <Profile />
+    },
+    {
+      path : "/create-news",
+      element : <CreateNews />
+    },
+    {
+      path: "/news/:id/:title",
+      element: <SingleNews />
+    }, {
+      path:"/add-event",
+      element: <AddEvent />
     }
   ])
   return (
